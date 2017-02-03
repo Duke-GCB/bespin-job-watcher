@@ -1,0 +1,51 @@
+<html>
+<head>
+    <title>Bespin Job Watcher</title>
+    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+</head>
+<body>
+<script>
+    var sock = new SockJS("/socks");
+
+    sock.onmessage = function (msg) {
+        document.getElementById('jobStatusList').innerText += '' + msg.data;
+    };
+
+    function addCommand() {
+        var jobId = document.getElementById('jobId').value;
+        sock.send(JSON.stringify({
+            "job": jobId,
+            "command": "add"
+        }));
+    }
+    function removeCommand() {
+        var jobId = document.getElementById('jobId').value;
+        sock.send(JSON.stringify({
+            "job": jobId,
+            "command": "remove"
+        }));
+
+    }
+</script>
+<h1>
+    Test frontend for websocket job status monitoring.
+</h1>
+<h2>Update list of jobs you are watching</h2>
+JobId:
+<input id="jobId" type="text"/>
+<form onsubmit="addCommand(); return false;">
+    <input type="submit" value="Start Watching(add)"/>
+</form>
+<form onsubmit="removeCommand(); return false;">
+    <input type="submit" value="Stop Watching(remove)"/>
+</form>
+
+<h2>Job Status Updates</h2>
+<div>
+      <span id="jobStatusList">
+
+      </span>
+</div>
+</body>
+</html>
+

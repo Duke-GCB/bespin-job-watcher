@@ -1,0 +1,11 @@
+{
+  "name": "bespin-job-watcher",
+  "version": "0.0.0",
+  "dependencies": {
+    "rabbit.js": "^0.4.4",
+    "sockjs": "0.3.x"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0"
+  }
+}
