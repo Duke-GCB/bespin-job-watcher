@@ -8,21 +8,25 @@
     var sock = new SockJS("/socks");
 
     sock.onmessage = function (msg) {
-        document.getElementById('jobStatusList').innerText += '' + msg.data;
+        document.getElementById('jobStatusList').innerHTML += msg.data + "<br />";
     };
 
     function addCommand() {
         var jobId = document.getElementById('jobId').value;
+        var authToken = document.getElementById('authToken').value;
         sock.send(JSON.stringify({
             "job": jobId,
-            "command": "add"
+            "command": "add",
+            "token": authToken
         }));
     }
     function removeCommand() {
         var jobId = document.getElementById('jobId').value;
+        var authToken = document.getElementById('authToken').value;
         sock.send(JSON.stringify({
             "job": jobId,
-            "command": "remove"
+            "command": "remove",
+            "token": authToken
         }));
 
     }
@@ -30,7 +34,12 @@
 <h1>
     Test frontend for websocket job status monitoring.
 </h1>
+<h2>Enter your auth token</h2>
+
+
 <h2>Update list of jobs you are watching</h2>
+Auth Token:
+<input id="authToken" type="text"/>
 JobId:
 <input id="jobId" type="text"/>
 <form onsubmit="addCommand(); return false;">
@@ -40,7 +49,7 @@ JobId:
     <input type="submit" value="Stop Watching(remove)"/>
 </form>
 
-<h2>Job Status Updates</h2>
+<h2>Data received from server:</h2>
 <div>
       <span id="jobStatusList">
 

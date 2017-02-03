@@ -3,5 +3,7 @@
   "rabbithost": "localhost",
   "rabbitport": 5672,
   "webserverport": 8080,
-  "webserverhost": "0.0.0.0"
+  "webserverhost": "0.0.0.0",
+  "bespinapihost": "127.0.0.1",
+  "bespinapiport": "8000"
 }

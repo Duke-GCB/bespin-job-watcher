@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "rabbit.js": "^0.4.4",
+    "request": "^2.79.0",
     "sockjs": "0.3.x"
   },
   "devDependencies": {
