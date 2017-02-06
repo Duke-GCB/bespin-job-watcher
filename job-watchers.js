@@ -11,8 +11,10 @@ function JobWatchers(notifyFunc) {
         jobIdToWatcher: {},
         add(jobId, watcher) {
             var watchers = this.jobIdToWatcher[jobId] || [];
-            watchers.push(watcher);
-            this.jobIdToWatcher[jobId] = watchers;
+            if (watchers.indexOf(watcher) === -1) {
+                watchers.push(watcher);
+                this.jobIdToWatcher[jobId] = watchers;
+            }
         },
         remove(jobId, watcher) {
             var watchers = this.jobIdToWatcher[jobId];

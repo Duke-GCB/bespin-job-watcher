@@ -49,6 +49,13 @@ describe('JobWatchers', function() {
         expect(job2Watchers.length).to.equal(1);
         expect(job2Watchers[0]).to.equal(watcher2);
     });
+    it('add() will not duplicate items already setup', function() {
+        var jobWatchers = JobWatchers();
+        jobWatchers.add(jobKey1, watcher1);
+        jobWatchers.add(jobKey1, watcher1);
+        var job1Watchers = jobWatchers.jobIdToWatcher[jobKey1];
+        expect(job1Watchers.length).to.equal(1);
+    });
     it('remove() can will remove that jobId/watcher combination', function() {
         var jobWatchers = JobWatchers();
         jobWatchers.add(jobKey1, watcher1);
