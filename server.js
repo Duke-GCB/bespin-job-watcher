@@ -17,7 +17,7 @@ var JobWatchers = require('./job-watchers');
 var jobWatchers = JobWatchers(sendJobStatusToWebsocket);
 var httpserver = http.createServer(handler);// Listen for SockJS connections
 var sockjs_opts = {
-    sockjs_url: "http://cdn.sockjs.org/sockjs-0.2.min.js"
+    sockjs_url: "https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"
 };
 var sjs = sockjs.createServer(sockjs_opts);
 sjs.installHandlers(httpserver, {prefix: '[/]socks'});
@@ -65,33 +65,34 @@ function notifyJobWatchers(jsonString) {
     }
 }
 
-function updateJobWatchers(conn, jsonString) {
+function processWebsocketCommand(conn, jsonString) {
     try {
         var data = JSON.parse(jsonString);
         var jobId = data['job'];
         var token = data['token'];
-        verifyToken(conn, jobId, token);
-        var command = data['command'];
-        if (jobId && command) {
-            if (command === 'add') {
-                console.log("Start watching " + jobId);
-                jobWatchers.add(jobId, conn);
-            } else if (command == 'remove') {
-                console.log("Stop watching " + jobId);
-                jobWatchers.remove(jobId, conn);
-            } else {
-                console.log("Invalid command on web socket: " + jsonString);
+        verifyToken(conn, jobId, token, function () {
+            var command = data['command'];
+            if (jobId && command) {
+                if (command === 'add') {
+                    console.log("Start watching " + jobId);
+                    jobWatchers.add(jobId, conn);
+                } else if (command == 'remove') {
+                    console.log("Stop watching " + jobId);
+                    jobWatchers.remove(jobId, conn);
+                } else {
+                    console.log("Invalid command on web socket: " + jsonString);
 
+                }
+            } else {
+                console.log("Invalid job data received on web socket: " + jsonString);
             }
-        } else {
-            console.log("Invalid job data received on web socket: " + jsonString);
-        }
+        });
     } catch (e) {
         console.log(e);
     }
 }
 
-function verifyToken(conn, jobId, token) {
+function verifyToken(conn, jobId, token, onValidToken) {
     var url = 'http://' + config.bespinapihost + ':' + config.bespinapiport + '/api/jobs/' + jobId + '/';
     var options = {
         url: url,
@@ -101,7 +102,7 @@ function verifyToken(conn, jobId, token) {
     };
     request(options, function (error, response, body) {
         if (!error && response.statusCode == 200) {
-            console.log(body) // Show the HTML for the Google homepage.
+            onValidToken();
         } else {
             var errorMessage = 'Checking authorization failed with status:' + response.statusCode + ":" + error;
             console.log(errorMessage);
@@ -115,7 +116,7 @@ context.on('ready', function () {
     // Hook requesting sockets up
     sjs.on('connection', function (conn) {
         function onData(data) {
-            updateJobWatchers(conn, data)
+            processWebsocketCommand(conn, data)
         }
         conn.on('data', onData)
         conn.on('close', function () {

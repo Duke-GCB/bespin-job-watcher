@@ -1,7 +1,7 @@
 <html>
 <head>
     <title>Bespin Job Watcher</title>
-    <script src="http://cdn.sockjs.org/sockjs-0.3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
 </head>
 <body>
 <script>
@@ -34,14 +34,15 @@
 <h1>
     Test frontend for websocket job status monitoring.
 </h1>
-<h2>Enter your auth token</h2>
-
-
 <h2>Update list of jobs you are watching</h2>
-Auth Token:
-<input id="authToken" type="text"/>
-JobId:
-<input id="jobId" type="text"/>
+<div>
+    Bespin Auth Token:
+    <input id="authToken" type="text"/>
+</div>
+<div>
+    JobId:
+    <input id="jobId" type="text"/>
+</div>
 <form onsubmit="addCommand(); return false;">
     <input type="submit" value="Start Watching(add)"/>
 </form>
