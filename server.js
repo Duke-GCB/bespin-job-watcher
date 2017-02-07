@@ -6,7 +6,8 @@ var url = require('url');
 var fs = require('fs');
 var config = require("./config.json");
 var sockjs = require('sockjs');
-var amqpConnection = 'amqp://' + config.rabbithost + ":" + config.rabbitport;
+var amqpConnection = 'amqp://' + config.rabbituser + ":" + config.rabbitpassword + "@" +
+        config.rabbithost + ":" + config.rabbitport;
 var context = require('rabbit.js').createContext(amqpConnection);
 var port = config.webserverport;
 var JobWatchers = require('./job-watchers');

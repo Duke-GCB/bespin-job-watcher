@@ -1,6 +1,8 @@
 {
   "rabbitexchange": "job_status",
-  "rabbithost": "localhost",
+  "rabbituser": "guest",
+  "rabbitpassword": "guest",
+  "rabbithost": "127.0.0.1",
   "rabbitport": 5672,
   "webserverport": 8080,
   "webserverhost": "0.0.0.0",
