@@ -33,11 +33,15 @@ function handleHTTPRequest(req, res) {
             });
             break;
         default:
-            console.log('up');
-            res.writeHead(404);
-            res.write('404');
-            return res.end();
+            return send404(res);
     }
+}
+
+function send404(res) {
+    console.log('up');
+    res.writeHead(404);
+    res.write('404');
+    return res.end();
 }
 
 module.exports = WebServer;
