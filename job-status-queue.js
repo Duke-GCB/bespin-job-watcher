@@ -1,5 +1,4 @@
 var rabbit = require('rabbit.js');
-
 var EXCHANGE_NAME = "job_status";
 
 function JobStatusQueue(config) {
@@ -13,8 +12,12 @@ function JobStatusQueue(config) {
 }
 
 function makeConnectionStr(config) {
-    return 'amqp://' + config.rabbituser + ":" + config.rabbitpassword + "@" +
-        config.rabbithost + ":" + config.rabbitport;
+    var protocol = config.rabbitprotocol;
+    var user = config.rabbituser;
+    var password = config.rabbitpassword;
+    var host = config.rabbithost;
+    var port = config.rabbitport;
+    return protocol + '://' + user + ":" + password + "@" + host + ":" + port;
 }
 
 function listenToExchange(context, onReady, onData) {
