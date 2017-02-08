@@ -14,9 +14,9 @@ function BespinApi(config) {
             });
         },
         makeURL: function(jobId) {
-            var protocol = config.bespinapiprotocol;
-            var host = config.bespinapihost;
-            var port = config.bespinapiport;
+            var protocol = config.bespinapi.protocol;
+            var host = config.bespinapi.host;
+            var port = config.bespinapi.port;
             return protocol + '://'+ host + ':' + port + '/api/jobs/' + jobId + '/';
         },
         makeRequestOptions: function(jobId, token) {

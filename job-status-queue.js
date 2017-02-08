@@ -12,11 +12,11 @@ function JobStatusQueue(config) {
 }
 
 function makeConnectionStr(config) {
-    var protocol = config.rabbitprotocol;
-    var user = config.rabbituser;
-    var password = config.rabbitpassword;
-    var host = config.rabbithost;
-    var port = config.rabbitport;
+    var protocol = config.rabbit.protocol;
+    var user = config.rabbit.user;
+    var password = config.rabbit.password;
+    var host = config.rabbit.host;
+    var port = config.rabbit.port;
     return protocol + '://' + user + ":" + password + "@" + host + ":" + port;
 }
 

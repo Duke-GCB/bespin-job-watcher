@@ -5,12 +5,10 @@ var JobStatusQueue = require('./job-status-queue');
 var webServer = WebServer(config);
 var jobStatusQueue = JobStatusQueue(config);
 
-function onJobStatusQueueReady() {
-    webServer.listen();
-}
-
-function onJobStatusData(jsonString) {
-    webServer.broadCastJobStatus(jsonString);
-}
-
-jobStatusQueue.listenToExchange(onJobStatusQueueReady, onJobStatusData);
+jobStatusQueue.listenToExchange(
+    function onJobStatusQueueReady() {
+        webServer.listen();
+    }, function onJobStatusData(jsonString) {
+        webServer.broadCastJobStatus(jsonString);
+    }
+);

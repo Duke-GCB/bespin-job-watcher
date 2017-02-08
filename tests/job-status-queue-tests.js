@@ -8,11 +8,13 @@ var JobStatusQueue = proxyquire('../job-status-queue', { 'rabbit.js': rabbitStub
 describe('JobStatusQueue', function() {
     it('constructor() can build context from ampq connection string from config', function() {
         var config = {
-            rabbitprotocol: "amqp",
-            rabbituser: 'joe',
-            rabbitpassword: 'secret',
-            rabbithost: '127.0.0.1',
-            rabbitport: '123456'
+            rabbit: {
+                protocol: "amqp",
+                user: 'joe',
+                password: 'secret',
+                host: '127.0.0.1',
+                port: '123456'
+            }
         };
         var connectionString = "";
         rabbitStub.createContext = function (data) { connectionString = data; return {};};
@@ -22,11 +24,13 @@ describe('JobStatusQueue', function() {
 
     it('listenToExchange() calls onReady and sets up onData', function() {
         var config = {
-            rabbitprotocol: "amqp",
-            rabbituser: 'joe',
-            rabbitpassword: 'secret',
-            rabbithost: '127.0.0.1',
-            rabbitport: '123456'
+            rabbit: {
+                protocol: "amqp",
+                user: 'joe',
+                password: 'secret',
+                host: '127.0.0.1',
+                port: '123456'
+            }
         };
         var readyCalled = '';
         var connectionString = "";

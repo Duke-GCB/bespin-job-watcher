@@ -12,25 +12,15 @@ var BespinApi = require('./bespin-api');
 var JobWatchers = require("./job-watchers");
 
 function WebServer(config) {
-    var bespinApi = BespinApi(config);
-    var jobWatchers = JobWatchers(sendJobStatusToWebsocket);
-
+    const bespinApi = BespinApi(config);
+    const jobWatchers = JobWatchers(sendJobStatusToWebsocket);
     const app = express();
     app.use('/', express.static('static'));
-    const options = {
-        key: fs.readFileSync('sslcert/key.pem'),
-        cert: fs.readFileSync('sslcert/cert.pem')
-    };
-    const server = https.createServer(options, app);
-    const wss = new WebSocket.Server({ server });
-    wss.on('connection', function connection(ws) {
-        webSocketConnection = WebSocketConnection(ws, jobWatchers, bespinApi);
-        ws.on('message', webSocketConnection.onData);
-        ws.on('close', webSocketConnection.close);
-    });
+    const server = createServer(config, app);
+    setupWebSocketServer(server);
     return {
         listen: function () {
-            server.listen(8080, function listening() {
+            server.listen(config.webserver.port, function listening() {
                 console.log('Listening on %d', server.address().port);
             });
         },
@@ -48,6 +38,23 @@ function WebServer(config) {
             }
         }
     }
+}
+
+function createServer(config, app) {
+    const options = {
+        key: fs.readFileSync(config.webserver.key),
+        cert: fs.readFileSync(config.webserver.cert)
+    };
+    return https.createServer(options, app);
+}
+
+function setupWebSocketServer(server) {
+    const wss = new WebSocket.Server({ server });
+    wss.on('connection', function connection(ws) {
+        webSocketConnection = WebSocketConnection(ws, jobWatchers, bespinApi);
+        ws.on('message', webSocketConnection.onData);
+        ws.on('close', webSocketConnection.close);
+    });
 }
 
 /**
@@ -102,7 +109,6 @@ function WebSocketConnection(ws, jobWatchers, bespinApi) {
                 onVerifyError("Invalid JSON received: " + jsonString)
             }
         },
-
         close: function() {
             jobWatchers.removeForAllJobIds(ws);
         }

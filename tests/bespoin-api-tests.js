@@ -14,9 +14,11 @@ var BespinApi = proxyquire('../bespin-api', { 'request': fakeRequest });
 describe('BespinApi', function() {
     it('makeRequestOptions() builds structure with expected URL', function() {
         var config = {
-            bespinapiprotocol: "https",
-            bespinapihost: "127.0.0.1",
-            bespinapiport: "12345"
+            bespinapi: {
+                protocol: "https",
+                host: "127.0.0.1",
+                port: "12345"
+            }
         };
         var jobId = "541";
         var token = "abcdefg";
@@ -27,9 +29,11 @@ describe('BespinApi', function() {
     });
     it('verifyToken() calls onValidToken when good', function() {
         var config = {
-            bespinapiprotocol: "https",
-            bespinapihost: "127.0.0.1",
-            bespinapiport: "12345"
+            bespinapi: {
+                protocol: "https",
+                host: "127.0.0.1",
+                port: "12345"
+            }
         };
         var jobId = "541";
         var token = "abcdefg";
@@ -51,9 +55,11 @@ describe('BespinApi', function() {
     });
     it('verifyToken() calls onInvalidToken when bad', function() {
         var config = {
-            bespinapiprotocol: "https",
-            bespinapihost: "127.0.0.1",
-            bespinapiport: "12345"
+            bespinapi: {
+                protocol: "https",
+                host: "127.0.0.1",
+                port: "12345"
+            }
         };
         var jobId = "541";
         var token = "abcdefg";
