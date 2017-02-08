@@ -16,20 +16,30 @@ function WebSockets(config, webServer) {
             });
         },
         broadCastJobStatus: function (jsonString) {
-            try {
-                var data = JSON.parse(jsonString);
-                console.log(data);
+            var data = parseJSON(jsonString);
+            if (data) {
                 var jobId = data['job'];
                 if (jobId) {
                     jobWatchers.notify(jobId, data);
                 } else {
                     console.log("Invalid job data received from rabbit: " + jsonString);
                 }
-            } catch (e) {
-                console.log(e);
             }
-
         }
+    }
+}
+
+/**
+ * Returns parsed json object or undefined if jsonString is invalid
+ * @param jsonString string that may contain JSON data
+ */
+function parseJSON(jsonString) {
+    try {
+        var data = JSON.parse(jsonString);
+        return data;
+    } catch (e) {
+        console.log("Invalid job status JSON received: " + jsonString);
+        return undefined;
     }
 }
 
@@ -66,21 +76,18 @@ function WebSocketConnection(sjsConnection, jobWatchers, bespinApi) {
     }
     return {
         onData: function(jsonString) {
-            try {
-                var data = JSON.parse(jsonString);
+            var data = parseJSON(jsonString);
+            if (data) {
                 var jobId = data['job'];
                 var token = data['token'];
                 var command = data['command'];
                 if (jobId && token && command) {
-                    console.log("OK", this);
                     bespinApi.verifyToken(jobId, token, function() {
                         onValidToken(jobId, command);
                     }, onVerifyError);
                 } else {
                     onVerifyError("Missing required job, token or command: " + jsonString)
                 }
-            } catch (e) {
-                console.log(e);
             }
         },
 
