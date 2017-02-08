@@ -32,7 +32,7 @@ function subscribeToExchange(context, exchangeName, onData) {
     subscription.setEncoding('utf8');
     subscription.on('data', onData);
     subscription.connect(exchangeName, function () {
-        console.log("Connected to " + exchangeName + " exchange.");
+        console.log("JobStatusQueue: Connected to " + exchangeName + " exchange.");
     });
 }
 

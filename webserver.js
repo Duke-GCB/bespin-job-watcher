@@ -12,6 +12,7 @@ function WebServer(config) {
     return {
         httpserver: httpserver,
         listen: function() {
+            console.log("WebServer: listening on to " + host + ":" + port);
             httpserver.listen(port, host);
         }
     };
@@ -19,14 +20,11 @@ function WebServer(config) {
 
 function handleHTTPRequest(req, res) {
     var path = url.parse(req.url).pathname;
-    console.log(path);
     switch (path) {
         case '/':
         case '/index.html':
-            console.log(process.cwd() + '/index.html');
             fs.readFile(process.cwd() + '/index.html', function (err, data) {
                 if (err) return send404(res);
-                console.log('oko');
                 res.writeHead(200, {'Content-Type': 'text/html'});
                 res.write(data, 'utf8');
                 res.end();
@@ -38,7 +36,6 @@ function handleHTTPRequest(req, res) {
 }
 
 function send404(res) {
-    console.log('up');
     res.writeHead(404);
     res.write('404');
     return res.end();

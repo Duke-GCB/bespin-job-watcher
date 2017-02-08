@@ -22,8 +22,10 @@ function WebSockets(config, webServer) {
                 if (jobId) {
                     jobWatchers.notify(jobId, data);
                 } else {
-                    console.log("Invalid job data received from rabbit: " + jsonString);
+                    console.log("WebSockets: Invalid job data received from rabbit: " + jsonString);
                 }
+            } else {
+                console.log("WebSockets: Invalid job status JSON received: " + jsonString);
             }
         }
     }
@@ -38,7 +40,6 @@ function parseJSON(jsonString) {
         var data = JSON.parse(jsonString);
         return data;
     } catch (e) {
-        console.log("Invalid job status JSON received: " + jsonString);
         return undefined;
     }
 }
@@ -60,16 +61,15 @@ function WebSocketConnection(sjsConnection, jobWatchers, bespinApi) {
 
     function onValidToken(jobId, command) {
         if (command === 'add') {
-            console.log("Start watching " + jobId);
             jobWatchers.add(jobId, sjsConnection);
         } else if (command == 'remove') {
-            console.log("Stop watching " + jobId);
             jobWatchers.remove(jobId, sjsConnection);
         } else {
             this.onVerifyError("Invalid command on web socket: " + command)
         }
     }
     function onVerifyError(errorMessage) {
+        console.log("WebSocketConnection:" + errorMessage);
         sjsConnection.write(makeWebsocketPayload({
             "message": errorMessage
         }, "error"));
@@ -88,6 +88,8 @@ function WebSocketConnection(sjsConnection, jobWatchers, bespinApi) {
                 } else {
                     onVerifyError("Missing required job, token or command: " + jsonString)
                 }
+            } else {
+                onVerifyError("Invalid JSON received: " + jsonString)
             }
         },
 
