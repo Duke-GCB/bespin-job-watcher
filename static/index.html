@@ -1,20 +1,20 @@
 <html>
 <head>
     <title>Bespin Job Watcher</title>
-    <script src="https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"></script>
 </head>
 <body>
 <script>
-    var sock = new SockJS("/socks");
+    var host = window.document.location.host.replace(/:.*/, '');
+    var ws = new WebSocket('wss://' + host + ':8080');
 
-    sock.onmessage = function (msg) {
+    ws.onmessage = function (msg) {
         document.getElementById('jobStatusList').innerHTML += msg.data + "<br />";
     };
 
     function addCommand() {
         var jobId = document.getElementById('jobId').value;
         var authToken = document.getElementById('authToken').value;
-        sock.send(JSON.stringify({
+        ws.send(JSON.stringify({
             "job": jobId,
             "command": "add",
             "token": authToken
@@ -23,7 +23,7 @@
     function removeCommand() {
         var jobId = document.getElementById('jobId').value;
         var authToken = document.getElementById('authToken').value;
-        sock.send(JSON.stringify({
+        ws.send(JSON.stringify({
             "job": jobId,
             "command": "remove",
             "token": authToken

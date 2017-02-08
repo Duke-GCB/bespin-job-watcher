@@ -1,5 +1,7 @@
 /**
- * Runs http server that serves up index.html and can have websocket support added to httpserver.
+ * Runs webserver serving static/index.html and handles websockets.
+ * Websockets send messages to register themselves to listen for particular jobs.
+ * The broadCastJobStatus is called to send updates to the Websockets associated with a job.
  */
 const express = require('express');
 const https = require('https');
@@ -8,7 +10,6 @@ const WebSocket = require('ws');
 const fs = require('fs');
 var BespinApi = require('./bespin-api');
 var JobWatchers = require("./job-watchers");
-
 
 function WebServer(config) {
     var bespinApi = BespinApi(config);
@@ -64,15 +65,6 @@ function parseJSON(jsonString) {
 
 function sendJobStatusToWebsocket(ws, data) {
     ws.send(makeWebsocketPayload(data, "ok"));
-}
-
-function createSockJS(httpserver) {
-    var sockjs_opts = {
-        sockjs_url: "https://cdn.jsdelivr.net/sockjs/1/sockjs.min.js"
-    };
-    var sjs = sockjs.createServer(sockjs_opts);
-    sjs.installHandlers(httpserver, {prefix: '[/]socks'});
-    return sjs;
 }
 
 function WebSocketConnection(ws, jobWatchers, bespinApi) {

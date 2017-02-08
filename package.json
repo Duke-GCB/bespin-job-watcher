@@ -2,9 +2,12 @@
   "name": "bespin-job-watcher",
   "version": "0.0.0",
   "dependencies": {
+    "bufferutil": "^2.0.1",
+    "express": "^4.14.1",
     "rabbit.js": "^0.4.4",
     "request": "^2.79.0",
-    "sockjs": "0.3.x"
+    "utf-8-validate": "^3.0.1",
+    "ws": "^2.0.3"
   },
   "devDependencies": {
     "chai": "^3.5.0",
