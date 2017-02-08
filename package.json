@@ -7,6 +7,7 @@
     "sockjs": "0.3.x"
   },
   "devDependencies": {
-    "chai": "^3.5.0"
+    "chai": "^3.5.0",
+    "proxyquire": "^1.7.11"
   }
 }
