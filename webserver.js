@@ -20,7 +20,11 @@ function WebServer(config) {
     setupWebSocketServer(server);
     return {
         listen: function () {
-            server.listen(config.webserver.port, function listening() {
+            const options = {
+                'host': config.webserver.host,
+                'port': config.webserver.port,
+            }
+            server.listen(options, function listening() {
                 console.log('Listening on %d', server.address().port);
             });
         },
