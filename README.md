@@ -28,8 +28,8 @@ node index.js
 ## Demo Webpage
 Browse to demo webpage: [https://localhost:8080/](https://localhost:8080/)
 
-Enter a user token from bespin-api and a job id owned by the specified token.
-Click `Start Watching(add)`.
+- Enter a user token from bespin-api and a job id owned by the specified token.
+- Click `Start Watching(add)`.
 At the bottom of the screen you will see any job messages as a JSON string.
 
 Browse to your rabbitmq web portal (If locally running rabbit [http://127.0.0.1:15672](http://127.0.0.1:15672)).
