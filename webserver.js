@@ -22,7 +22,7 @@ function WebServer(config) {
         listen: function () {
             const options = {
                 'host': config.webserver.host,
-                'port': config.webserver.port,
+                'port': config.webserver.port
             };
             server.listen(options, function listening() {
                 console.log('Listening on %d', server.address().port);
@@ -79,7 +79,6 @@ function sendJobStatusToWebsocket(ws, data) {
 }
 
 function WebSocketConnection(ws, jobWatchers, bespinApi) {
-
     function onValidToken(jobId, command) {
         if (command === 'add') {
             jobWatchers.add(jobId, ws);
