@@ -5,8 +5,8 @@
  */
 const express = require('express');
 const https = require('https');
-const url = require('url');
 const WebSocket = require('ws');
+const url = require('url');
 const fs = require('fs');
 var BespinApi = require('./bespin-api');
 var JobWatchers = require("./job-watchers");
