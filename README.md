@@ -36,6 +36,31 @@ Browse to your rabbitmq web portal (If locally running rabbit [http://127.0.0.1:
 - Click Exchanges
 - Click __job_status__
 - Expand __Publish message__ 
-- Enter a job status payload in JSON format. Example `{"job":"123", "status":"R"}`.
+- Enter a job status payload in JSON format. Example `{"job":"123", "state":"R"}`.
 - Click __Publish Message__
 If you subscribed to this message you should see this message show up at the bottom of the Demo webpage.
+
+## Usage
+Users should connect a websocket and send an __add__ message passing the __jobId__ and their bespin-api __authToken__.
+The websocket will receive the messages of status "ok" or "error".
+Example good message:
+```
+{
+  "status":"ok",
+  "data":{
+    "job":"16",
+    "state":"R",
+    "step":"V"
+  }
+}
+```
+Example error message:
+```
+{
+  "status":"error",
+  "data":{
+    "message":"Checking authorization failed with status:404:null"
+  }
+}
+```
+See static/index.html for sample Javascript.
