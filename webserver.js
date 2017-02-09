@@ -15,15 +15,15 @@ function WebServer(config) {
     const bespinApi = BespinApi(config);
     const jobWatchers = JobWatchers(sendJobStatusToWebsocket);
     const app = express();
-    app.use('/', express.static('static'));
+    app.use(express.static('static'));
     const server = createServer(config, app);
-    setupWebSocketServer(server);
+    setupWebSocketServer(server, jobWatchers, bespinApi);
     return {
         listen: function () {
             const options = {
                 'host': config.webserver.host,
                 'port': config.webserver.port,
-            }
+            };
             server.listen(options, function listening() {
                 console.log('Listening on %d', server.address().port);
             });
@@ -52,7 +52,7 @@ function createServer(config, app) {
     return https.createServer(options, app);
 }
 
-function setupWebSocketServer(server) {
+function setupWebSocketServer(server, jobWatchers, bespinApi) {
     const wss = new WebSocket.Server({ server });
     wss.on('connection', function connection(ws) {
         webSocketConnection = WebSocketConnection(ws, jobWatchers, bespinApi);
@@ -127,6 +127,5 @@ function makeWebsocketPayload(data, status) {
         }
     );
 }
-
 
 module.exports = WebServer;
