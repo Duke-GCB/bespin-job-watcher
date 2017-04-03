@@ -1,3 +1,4 @@
+"use strict";
 const rabbit = require('rabbit.js');
 
 function JobStatusQueue(config) {

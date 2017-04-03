@@ -1,3 +1,4 @@
+"use strict";
 const config = require("./config.json");
 const WebServer = require("./webserver");
 const JobStatusQueue = require('./job-status-queue');

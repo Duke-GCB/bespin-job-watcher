@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Runs webserver serving static/index.html and handles websockets.
  * Websockets send messages to register themselves to listen for particular jobs.
