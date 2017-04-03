@@ -54,7 +54,30 @@ describe('BespinApiClient', function() {
         lastRequest.func(error, response);
         expect(result).to.equal('Valid 541');
     });
-    it('verifyToken() calls onInvalidToken when bad', function() {
+    it('verifyToken() calls onInvalidToken when bad with null response', function() {
+        const config = {
+            bespinapi: {
+                protocol: "https",
+                host: "127.0.0.1",
+                port: "12345"
+            }
+        };
+        const jobId = "541";
+        const token = "abcdefg";
+        const bespinApiClient = BespinApiClient(config);
+        let result = '';
+        function onValidToken(jobId) {
+            result = 'Valid ' + jobId;
+        }
+        function onInvalidToken(error) {
+            result = 'Error ' + error;
+        }
+        bespinApiClient.verifyToken(jobId, token, onValidToken, onInvalidToken);
+        const error = 'bad';
+        lastRequest.func(error, null);
+        expect(result).to.equal('Error Checking authorization failed with:bad');
+    });
+    it('verifyToken() calls onInvalidToken when bad 404 response', function() {
         const config = {
             bespinapi: {
                 protocol: "https",
@@ -79,6 +102,6 @@ describe('BespinApiClient', function() {
             error: 'oops'
         };
         lastRequest.func(error, response);
-        expect(result).to.equal('Error Checking authorization failed with status:404:bad');
+        expect(result).to.equal('Error Checking authorization failed with:bad (404)');
     });
 });

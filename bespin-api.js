@@ -6,10 +6,14 @@ function BespinApiClient(config) {
         verifyToken: function (jobId, token, onValidToken, onInvalidToken) {
             const options = this.makeRequestOptions(jobId, token);
             request(options, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
+                const statusCode = response && response.statusCode;
+                if (!error && statusCode === 200) {
                     onValidToken(jobId);
                 } else {
-                    const errorMessage = 'Checking authorization failed with status:' + response.statusCode + ":" + error;
+                    let errorMessage = 'Checking authorization failed with:' + error;
+                    if (statusCode) {
+                        errorMessage += " (" + statusCode + ")";
+                    }
                     onInvalidToken(errorMessage);
                 }
             });
