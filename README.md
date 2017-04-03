@@ -15,6 +15,7 @@ npm install
 ```
 
 Edit config.json changing it as necessary for RabbitMQ and bespin-api. 
+
 As long as both are running locally the default values should be fine.
 
 ## Run
