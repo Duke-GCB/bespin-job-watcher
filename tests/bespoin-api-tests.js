@@ -1,44 +1,45 @@
-var chai = require('chai');
-var expect = chai.expect;
-var proxyquire =  require('proxyquire')
-    , assert     =  require('assert')
-    , requestStub   =  { };
+"use strict";
+const chai = require('chai');
+const expect = chai.expect;
+const proxyquire = require('proxyquire')
+    , assert = require('assert')
+    , requestStub = {};
 
-var lastRequest = {};
+const lastRequest = {};
 function fakeRequest(options, func) {
     lastRequest.options = options;
     lastRequest.func = func;
 }
-var BespinApiClient = proxyquire('../bespin-api', { 'request': fakeRequest });
+const BespinApiClient = proxyquire('../bespin-api', { 'request': fakeRequest });
 
 describe('BespinApiClient', function() {
     it('makeRequestOptions() builds structure with expected URL', function() {
-        var config = {
+        const config = {
             bespinapi: {
                 protocol: "https",
                 host: "127.0.0.1",
                 port: "12345"
             }
         };
-        var jobId = "541";
-        var token = "abcdefg";
-        var bespinApiClient = BespinApiClient(config);
-        var requestOptions = bespinApiClient.makeRequestOptions(jobId, token);
+        const jobId = "541";
+        const token = "abcdefg";
+        const bespinApiClient = BespinApiClient(config);
+        const requestOptions = bespinApiClient.makeRequestOptions(jobId, token);
         expect(requestOptions.url).to.equal('https://127.0.0.1:12345/api/jobs/541/');
         expect(requestOptions.headers['Authorization']).to.equal('Token abcdefg');
     });
     it('verifyToken() calls onValidToken when good', function() {
-        var config = {
+        const config = {
             bespinapi: {
                 protocol: "https",
                 host: "127.0.0.1",
                 port: "12345"
             }
         };
-        var jobId = "541";
-        var token = "abcdefg";
-        var bespinApiClient = BespinApiClient(config);
-        var result = '';
+        const jobId = "541";
+        const token = "abcdefg";
+        const bespinApiClient = BespinApiClient(config);
+        let result = '';
         function onValidToken(jobId) {
             result = 'Valid ' + jobId;
         }
@@ -46,25 +47,25 @@ describe('BespinApiClient', function() {
             result = 'Error ' + error;
         }
         bespinApiClient.verifyToken(jobId, token, onValidToken, onInvalidToken);
-        var error = '';
-        var response = {
+        const error = '';
+        const response = {
             statusCode: 200
         };
         lastRequest.func(error, response);
         expect(result).to.equal('Valid 541');
     });
     it('verifyToken() calls onInvalidToken when bad', function() {
-        var config = {
+        const config = {
             bespinapi: {
                 protocol: "https",
                 host: "127.0.0.1",
                 port: "12345"
             }
         };
-        var jobId = "541";
-        var token = "abcdefg";
-        var bespinApiClient = BespinApiClient(config);
-        var result = '';
+        const jobId = "541";
+        const token = "abcdefg";
+        const bespinApiClient = BespinApiClient(config);
+        let result = '';
         function onValidToken(jobId) {
             result = 'Valid ' + jobId;
         }
@@ -72,8 +73,8 @@ describe('BespinApiClient', function() {
             result = 'Error ' + error;
         }
         bespinApiClient.verifyToken(jobId, token, onValidToken, onInvalidToken);
-        var error = 'bad';
-        var response = {
+        const error = 'bad';
+        const response = {
             statusCode: 404,
             error: 'oops'
         };

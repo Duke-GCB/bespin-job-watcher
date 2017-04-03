@@ -1,13 +1,14 @@
-var chai = require('chai');
-var expect = chai.expect;
-var proxyquire =  require('proxyquire')
-    , assert     =  require('assert')
-    , rabbitStub   =  { };
-var JobStatusQueue = proxyquire('../job-status-queue', { 'rabbit.js': rabbitStub });
+"use strict";
+const chai = require('chai');
+const expect = chai.expect;
+const proxyquire = require('proxyquire')
+    , assert = require('assert')
+    , rabbitStub = {};
+const JobStatusQueue = proxyquire('../job-status-queue', { 'rabbit.js': rabbitStub });
 
 describe('JobStatusQueue', function() {
     it('constructor() can build context from ampq connection string from config', function() {
-        var config = {
+        const config = {
             rabbit: {
                 protocol: "amqp",
                 user: 'joe',
@@ -16,14 +17,14 @@ describe('JobStatusQueue', function() {
                 port: '123456'
             }
         };
-        var connectionString = "";
+        let connectionString = "";
         rabbitStub.createContext = function (data) { connectionString = data; return {};};
-        var jobStatusQueue = JobStatusQueue(config);
+        const jobStatusQueue = JobStatusQueue(config);
         expect(connectionString).to.equal('amqp://joe:secret@127.0.0.1:123456');
     });
 
     it('listenToExchange() calls onReady and sets up onData', function() {
-        var config = {
+        const config = {
             rabbit: {
                 protocol: 'amqp',
                 exchange: 'job_status2',
@@ -33,12 +34,12 @@ describe('JobStatusQueue', function() {
                 port: '123456'
             }
         };
-        var readyCalled = '';
-        var connectionString = "";
-        var contextOnParam = '';
-        var subscriptionExchange = '';
-        var subscriptionOnDataParam = '';
-        var subscriptionOnDataFunc = '';
+        let readyCalled = '';
+        let connectionString = "";
+        let contextOnParam = '';
+        let subscriptionExchange = '';
+        let subscriptionOnDataParam = '';
+        let subscriptionOnDataFunc = '';
         rabbitStub.createContext = function (data) { connectionString = data; return {
             on: function(param, func) {
                 contextOnParam = param;
@@ -57,7 +58,7 @@ describe('JobStatusQueue', function() {
                 }
             }
         };};
-        var jobStatusQueue = JobStatusQueue(config);
+        const jobStatusQueue = JobStatusQueue(config);
         function onReady() {
             readyCalled = 'true';
         }

@@ -1,6 +1,7 @@
-var chai = require('chai');
-var expect = chai.expect;
-var proxyquire =  require('proxyquire')
+"use strict";
+const chai = require('chai');
+const expect = chai.expect;
+const proxyquire =  require('proxyquire')
     , assert = require('assert')
     , httpsStub =  {}
     , fsStub = {}
@@ -14,7 +15,7 @@ function fakeExpress() {
     }
 }
 
-var jobWatcherData = {};
+let jobWatcherData = {};
 function fakeJobWatchers() {
     return {
         notify: function(jobId, data) {
@@ -24,7 +25,7 @@ function fakeJobWatchers() {
     }
 }
 
-var Webserver = proxyquire('../webserver', {
+const Webserver = proxyquire('../webserver', {
     'fs': fsStub,
     'express': fakeExpress,
     'https': httpsStub,
@@ -34,7 +35,7 @@ var Webserver = proxyquire('../webserver', {
 
 describe('Webserver', function() {
     it('constructor/listen() parses config correctly', function() {
-        var config = {
+        const config = {
             webserver: {
                 "host": "121.0.0.1",
                 "port": 8081,
@@ -42,8 +43,8 @@ describe('Webserver', function() {
                 "cert": "mycert.pem"
             }
         };
-        var createServerOptions = {};
-        var serverListenOptions = {};
+        let createServerOptions = {};
+        let serverListenOptions = {};
         httpsStub.createServer = function (options, app) {
             createServerOptions = options;
             return {
@@ -68,7 +69,7 @@ describe('Webserver', function() {
             }
             return '';
         };
-        var webserver = Webserver(config);
+        const webserver = Webserver(config);
         webserver.listen();
         expect(createServerOptions.key).to.equal('keydata');
         expect(createServerOptions.cert).to.equal('certdata');
@@ -76,7 +77,7 @@ describe('Webserver', function() {
         expect(serverListenOptions.port).to.equal(8081);
     });
     it('broadCastJobStatus will call jobWatchers.notify', function() {
-        var config = {
+        const config = {
             webserver: {
                 "host": "121.0.0.1",
                 "port": 8081,
@@ -84,8 +85,8 @@ describe('Webserver', function() {
                 "cert": "mycert.pem"
             }
         };
-        var createServerOptions = {};
-        var serverListenOptions = {};
+        let createServerOptions = {};
+        let serverListenOptions = {};
         httpsStub.createServer = function (options, app) {
             createServerOptions = options;
             return {}
@@ -106,7 +107,7 @@ describe('Webserver', function() {
             }
             return '';
         };
-        var webserver = Webserver(config);
+        const webserver = Webserver(config);
         jobWatcherData = {};
         webserver.broadCastJobStatus('{"job":1, "status":"Not good"}');
         expect(jobWatcherData.jobId).to.equal(1);
