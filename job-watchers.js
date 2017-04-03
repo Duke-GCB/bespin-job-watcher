@@ -10,6 +10,7 @@ function JobWatchers(notifyFunc) {
         notifyFunc: notifyFunc,
         jobIdToWatcher: {},
         add(jobId, watcher) {
+            console.log("Add watcher for " + jobId);
             const watchers = this.jobIdToWatcher[jobId] || [];
             if (watchers.indexOf(watcher) === -1) {
                 watchers.push(watcher);
@@ -17,6 +18,7 @@ function JobWatchers(notifyFunc) {
             }
         },
         remove(jobId, watcher) {
+            console.log("Remove watcher for " + jobId);
             const watchers = this.jobIdToWatcher[jobId];
             if (watchers) {
                 const watcherIndex = watchers.indexOf(watcher);
