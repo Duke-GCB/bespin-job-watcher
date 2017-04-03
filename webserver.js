@@ -5,6 +5,7 @@
  * The broadCastJobStatus is called to send updates to the Websockets associated with a job.
  */
 const express = require('express');
+const http = require('http');
 const https = require('https');
 const WebSocket = require('ws');
 const url = require('url');
@@ -28,8 +29,8 @@ function WebServer(config) {
     return {
         listen: function () {
             const options = {
-                'host': config.webserver.host,
-                'port': config.webserver.port
+                'host': config.listenOn.host,
+                'port': config.listenOn.port
             };
             server.listen(options, function listening() {
                 console.log('Listening on %d', server.address().port);
@@ -52,17 +53,21 @@ function WebServer(config) {
 }
 
 function createServer(config, app) {
-    const options = {
-        key: fs.readFileSync(config.webserver.key),
-        cert: fs.readFileSync(config.webserver.cert)
-    };
-    return https.createServer(options, app);
+    if (config.listenOn.key) {
+        const options = {
+            key: fs.readFileSync(config.listenOn.key),
+            cert: fs.readFileSync(config.listenOn.cert)
+        };
+        return https.createServer(options, app);
+    } else {
+        return http.createServer(app);
+    }
 }
 
 function setupWebSocketServer(server, jobWatchers, bespinApiClient) {
     const wss = new WebSocket.Server({ server });
     wss.on('connection', function connection(ws) {
-        webSocketConnection = WebSocketConnection(ws, jobWatchers, bespinApiClient);
+        const webSocketConnection = WebSocketConnection(ws, jobWatchers, bespinApiClient);
         ws.on('message', webSocketConnection.onData);
         ws.on('close', webSocketConnection.close);
     });
