@@ -9,14 +9,15 @@ that have presented valid credentials for those jobs.
 - [bespin-api](https://github.com/Duke-GCB/bespin-api) - running instance
 
 ## Setup:
-Install node modules.
+#### Install node modules
 ```
 npm install
 ```
 
+#### Update Config
 Edit config.json changing it as necessary for RabbitMQ and bespin-api. 
 
-As long as both are running locally the default values should be fine.
+As long as both are running locally the default values in config.json should be fine.
 
 ## Run
 ```
@@ -66,14 +67,14 @@ See static/index.html for sample Javascript.
 
 
 ## Run with https
-#### Create certificates:
+#### Create certificates
 ```
 mkdir sslcert
 cd sslcert && openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes && cd ..
 ```
 You can just hit enter for all the openssl prompts.
 
-#### Update config.json to point to your certificates:
+#### Update config.json
 You must specify the locations of the key and cert at listenOn.key and listenOn.cert:
 ```
 ...
@@ -83,7 +84,7 @@ You must specify the locations of the key and cert at listenOn.key and listenOn.
 ...
 ```
 
-#### Run as you normally would:
+#### Run as you normally would
 ```
 node index.js
 ```
