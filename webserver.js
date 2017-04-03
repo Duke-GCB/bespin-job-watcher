@@ -8,7 +8,7 @@ const https = require('https');
 const WebSocket = require('ws');
 const url = require('url');
 const fs = require('fs');
-const BespinApi = require('./bespin-api');
+const BespinApiClient = require('./bespin-api');
 const JobWatchers = require("./job-watchers");
 
 /**
@@ -18,12 +18,12 @@ const JobWatchers = require("./job-watchers");
  * @constructor
  */
 function WebServer(config) {
-    const bespinApi = BespinApi(config);
+    const bespinApiClient = BespinApiClient(config);
     const jobWatchers = JobWatchers(sendJobStatusToWebsocket);
     const app = express();
     app.use(express.static('static'));
     const server = createServer(config, app);
-    setupWebSocketServer(server, jobWatchers, bespinApi);
+    setupWebSocketServer(server, jobWatchers, bespinApiClient);
     return {
         listen: function () {
             const options = {
@@ -58,10 +58,10 @@ function createServer(config, app) {
     return https.createServer(options, app);
 }
 
-function setupWebSocketServer(server, jobWatchers, bespinApi) {
+function setupWebSocketServer(server, jobWatchers, bespinApiClient) {
     const wss = new WebSocket.Server({ server });
     wss.on('connection', function connection(ws) {
-        webSocketConnection = WebSocketConnection(ws, jobWatchers, bespinApi);
+        webSocketConnection = WebSocketConnection(ws, jobWatchers, bespinApiClient);
         ws.on('message', webSocketConnection.onData);
         ws.on('close', webSocketConnection.close);
     });
@@ -84,7 +84,7 @@ function sendJobStatusToWebsocket(ws, data) {
     ws.send(makeWebsocketPayload(data, "ok"));
 }
 
-function WebSocketConnection(ws, jobWatchers, bespinApi) {
+function WebSocketConnection(ws, jobWatchers, bespinApiClient) {
     function onValidToken(jobId, command) {
         if (command === 'add') {
             jobWatchers.add(jobId, ws);
@@ -108,7 +108,7 @@ function WebSocketConnection(ws, jobWatchers, bespinApi) {
                 const token = data['token'];
                 const command = data['command'];
                 if (jobId && token && command) {
-                    bespinApi.verifyToken(jobId, token, function() {
+                    bespinApiClient.verifyToken(jobId, token, function() {
                         onValidToken(jobId, command);
                     }, onVerifyError);
                 } else {

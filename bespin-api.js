@@ -1,6 +1,6 @@
 const request = require('request');
 
-function BespinApi(config) {
+function BespinApiClient(config) {
     return {
         verifyToken: function (jobId, token, onValidToken, onInvalidToken) {
             const options = this.makeRequestOptions(jobId, token);
@@ -30,4 +30,4 @@ function BespinApi(config) {
     };
 }
 
-module.exports = BespinApi;
+module.exports = BespinApiClient;

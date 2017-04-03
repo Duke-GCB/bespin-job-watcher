@@ -9,9 +9,9 @@ function fakeRequest(options, func) {
     lastRequest.options = options;
     lastRequest.func = func;
 }
-var BespinApi = proxyquire('../bespin-api', { 'request': fakeRequest });
+var BespinApiClient = proxyquire('../bespin-api', { 'request': fakeRequest });
 
-describe('BespinApi', function() {
+describe('BespinApiClient', function() {
     it('makeRequestOptions() builds structure with expected URL', function() {
         var config = {
             bespinapi: {
@@ -22,8 +22,8 @@ describe('BespinApi', function() {
         };
         var jobId = "541";
         var token = "abcdefg";
-        var bespinApi = BespinApi(config);
-        var requestOptions = bespinApi.makeRequestOptions(jobId, token);
+        var bespinApiClient = BespinApiClient(config);
+        var requestOptions = bespinApiClient.makeRequestOptions(jobId, token);
         expect(requestOptions.url).to.equal('https://127.0.0.1:12345/api/jobs/541/');
         expect(requestOptions.headers['Authorization']).to.equal('Token abcdefg');
     });
@@ -37,7 +37,7 @@ describe('BespinApi', function() {
         };
         var jobId = "541";
         var token = "abcdefg";
-        var bespinApi = BespinApi(config);
+        var bespinApiClient = BespinApiClient(config);
         var result = '';
         function onValidToken(jobId) {
             result = 'Valid ' + jobId;
@@ -45,7 +45,7 @@ describe('BespinApi', function() {
         function onInvalidToken(error) {
             result = 'Error ' + error;
         }
-        bespinApi.verifyToken(jobId, token, onValidToken, onInvalidToken);
+        bespinApiClient.verifyToken(jobId, token, onValidToken, onInvalidToken);
         var error = '';
         var response = {
             statusCode: 200
@@ -63,7 +63,7 @@ describe('BespinApi', function() {
         };
         var jobId = "541";
         var token = "abcdefg";
-        var bespinApi = BespinApi(config);
+        var bespinApiClient = BespinApiClient(config);
         var result = '';
         function onValidToken(jobId) {
             result = 'Valid ' + jobId;
@@ -71,7 +71,7 @@ describe('BespinApi', function() {
         function onInvalidToken(error) {
             result = 'Error ' + error;
         }
-        bespinApi.verifyToken(jobId, token, onValidToken, onInvalidToken);
+        bespinApiClient.verifyToken(jobId, token, onValidToken, onInvalidToken);
         var error = 'bad';
         var response = {
             statusCode: 404,

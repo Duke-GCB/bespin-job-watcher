@@ -25,7 +25,8 @@ describe('JobStatusQueue', function() {
     it('listenToExchange() calls onReady and sets up onData', function() {
         var config = {
             rabbit: {
-                protocol: "amqp",
+                protocol: 'amqp',
+                exchange: 'job_status2',
                 user: 'joe',
                 password: 'secret',
                 host: '127.0.0.1',
@@ -63,7 +64,7 @@ describe('JobStatusQueue', function() {
         function onData() {}
         jobStatusQueue.listenToExchange(onReady, onData);
         expect(contextOnParam).to.equal('ready');
-        expect(subscriptionExchange).to.equal('job_status');
+        expect(subscriptionExchange).to.equal('job_status2');
         expect(subscriptionOnDataParam).to.equal('data');
         expect(subscriptionOnDataFunc).to.equal(onData);
     });
