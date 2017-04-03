@@ -36,7 +36,7 @@ const Webserver = proxyquire('../webserver', {
 describe('Webserver', function() {
     it('constructor/listen() parses config correctly', function() {
         const config = {
-            webserver: {
+            listenOn: {
                 "host": "121.0.0.1",
                 "port": 8081,
                 "key": "mykey.pem",
@@ -78,7 +78,7 @@ describe('Webserver', function() {
     });
     it('broadCastJobStatus will call jobWatchers.notify', function() {
         const config = {
-            webserver: {
+            listenOn: {
                 "host": "121.0.0.1",
                 "port": 8081,
                 "key": "mykey.pem",
