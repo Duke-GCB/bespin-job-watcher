@@ -1,34 +1,33 @@
-var rabbit = require('rabbit.js');
-var EXCHANGE_NAME = "job_status";
+const rabbit = require('rabbit.js');
 
 function JobStatusQueue(config) {
-    var connectionString = makeConnectionStr(config);
-    var context = rabbit.createContext(connectionString);
+    const connectionString = makeConnectionStr(config);
+    const context = rabbit.createContext(connectionString);
     return {
         listenToExchange: function (onReady, onData) {
-            listenToExchange(context, onReady, onData)
+            listenToExchange(context, config.rabbit.exchange, onReady, onData)
         }
     };
 }
 
 function makeConnectionStr(config) {
-    var protocol = config.rabbit.protocol;
-    var user = config.rabbit.user;
-    var password = config.rabbit.password;
-    var host = config.rabbit.host;
-    var port = config.rabbit.port;
+    const protocol = config.rabbit.protocol;
+    const user = config.rabbit.user;
+    const password = config.rabbit.password;
+    const host = config.rabbit.host;
+    const port = config.rabbit.port;
     return protocol + '://' + user + ":" + password + "@" + host + ":" + port;
 }
 
-function listenToExchange(context, onReady, onData) {
+function listenToExchange(context, exchangeName, onReady, onData) {
     context.on('ready', function () {
-        subscribeToExchange(context, EXCHANGE_NAME, onData);
+        subscribeToExchange(context, exchangeName, onData);
         onReady()
     });
 }
 
 function subscribeToExchange(context, exchangeName, onData) {
-    var subscription = context.socket('SUB');
+    const subscription = context.socket('SUB');
     subscription.setEncoding('utf8');
     subscription.on('data', onData);
     subscription.connect(exchangeName, function () {

@@ -10,16 +10,16 @@ function JobWatchers(notifyFunc) {
         notifyFunc: notifyFunc,
         jobIdToWatcher: {},
         add(jobId, watcher) {
-            var watchers = this.jobIdToWatcher[jobId] || [];
+            const watchers = this.jobIdToWatcher[jobId] || [];
             if (watchers.indexOf(watcher) === -1) {
                 watchers.push(watcher);
                 this.jobIdToWatcher[jobId] = watchers;
             }
         },
         remove(jobId, watcher) {
-            var watchers = this.jobIdToWatcher[jobId];
+            const watchers = this.jobIdToWatcher[jobId];
             if (watchers) {
-                var watcherIndex = watchers.indexOf(watcher);
+                const watcherIndex = watchers.indexOf(watcher);
                 if (watcherIndex != -1) {
                     watchers.splice(watcherIndex, 1);
                 }
@@ -29,14 +29,14 @@ function JobWatchers(notifyFunc) {
             }
         },
         removeForAllJobIds(watcher) {
-            for (var jobId in this.jobIdToWatcher) {
+            for (let jobId in this.jobIdToWatcher) {
                 this.remove(jobId, watcher);
             }
         },
         notify(jobId, data) {
-            var watchers = this.jobIdToWatcher[jobId];
+            const watchers = this.jobIdToWatcher[jobId];
             if (watchers) {
-                for (var i = 0; i < watchers.length; i++) {
+                for (let i = 0; i < watchers.length; i++) {
                     this.notifyFunc(watchers[i], data);
                 }
             }
