@@ -11,6 +11,12 @@ const fs = require('fs');
 var BespinApi = require('./bespin-api');
 var JobWatchers = require("./job-watchers");
 
+/**
+ * Creates webserver that will broadcast job status messages to websockets.
+ * @param config: global configuration settings from config.json
+ * @returns {{listen: listen, broadCastJobStatus: (function(*=))}}
+ * @constructor
+ */
 function WebServer(config) {
     const bespinApi = BespinApi(config);
     const jobWatchers = JobWatchers(sendJobStatusToWebsocket);
