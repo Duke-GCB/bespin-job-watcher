@@ -79,7 +79,7 @@ You must specify the locations of the key and cert at listenOn.key and listenOn.
 ```
 ...
   "listenOn": {
-     "key": "sslcert/mykey.pem",
+     "key": "sslcert/key.pem",
      "cert": "sslcert/cert.pem",
 ...
 ```
