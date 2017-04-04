@@ -90,6 +90,7 @@ You will need to change the sample test program to use the __wss__ protocol inst
 <script>
    ...
    var ws = new WebSocket('wss://' + host + ':8080');
+   ...
 ```
 
 #### Run as you normally would
