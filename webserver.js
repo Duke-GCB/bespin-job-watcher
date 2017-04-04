@@ -1,15 +1,17 @@
+"use strict";
 /**
  * Runs webserver serving static/index.html and handles websockets.
  * Websockets send messages to register themselves to listen for particular jobs.
  * The broadCastJobStatus is called to send updates to the Websockets associated with a job.
  */
 const express = require('express');
+const http = require('http');
 const https = require('https');
 const WebSocket = require('ws');
 const url = require('url');
 const fs = require('fs');
-var BespinApi = require('./bespin-api');
-var JobWatchers = require("./job-watchers");
+const BespinApiClient = require('./bespin-api');
+const JobWatchers = require("./job-watchers");
 
 /**
  * Creates webserver that will broadcast job status messages to websockets.
@@ -18,26 +20,26 @@ var JobWatchers = require("./job-watchers");
  * @constructor
  */
 function WebServer(config) {
-    const bespinApi = BespinApi(config);
+    const bespinApiClient = BespinApiClient(config);
     const jobWatchers = JobWatchers(sendJobStatusToWebsocket);
     const app = express();
     app.use(express.static('static'));
     const server = createServer(config, app);
-    setupWebSocketServer(server, jobWatchers, bespinApi);
+    setupWebSocketServer(server, jobWatchers, bespinApiClient);
     return {
         listen: function () {
             const options = {
-                'host': config.webserver.host,
-                'port': config.webserver.port
+                'host': config.listenOn.host,
+                'port': config.listenOn.port
             };
             server.listen(options, function listening() {
                 console.log('Listening on %d', server.address().port);
             });
         },
         broadCastJobStatus(jsonString) {
-            var data = parseJSON(jsonString);
+            const data = parseJSON(jsonString);
             if (data) {
-                var jobId = data['job'];
+                const jobId = data['job'];
                 if (jobId) {
                     jobWatchers.notify(jobId, data);
                 } else {
@@ -51,17 +53,21 @@ function WebServer(config) {
 }
 
 function createServer(config, app) {
-    const options = {
-        key: fs.readFileSync(config.webserver.key),
-        cert: fs.readFileSync(config.webserver.cert)
-    };
-    return https.createServer(options, app);
+    if (config.listenOn.key) {
+        const options = {
+            key: fs.readFileSync(config.listenOn.key),
+            cert: fs.readFileSync(config.listenOn.cert)
+        };
+        return https.createServer(options, app);
+    } else {
+        return http.createServer(app);
+    }
 }
 
-function setupWebSocketServer(server, jobWatchers, bespinApi) {
+function setupWebSocketServer(server, jobWatchers, bespinApiClient) {
     const wss = new WebSocket.Server({ server });
     wss.on('connection', function connection(ws) {
-        webSocketConnection = WebSocketConnection(ws, jobWatchers, bespinApi);
+        const webSocketConnection = WebSocketConnection(ws, jobWatchers, bespinApiClient);
         ws.on('message', webSocketConnection.onData);
         ws.on('close', webSocketConnection.close);
     });
@@ -73,7 +79,7 @@ function setupWebSocketServer(server, jobWatchers, bespinApi) {
  */
 function parseJSON(jsonString) {
     try {
-        var data = JSON.parse(jsonString);
+        const data = JSON.parse(jsonString);
         return data;
     } catch (e) {
         return undefined;
@@ -84,7 +90,7 @@ function sendJobStatusToWebsocket(ws, data) {
     ws.send(makeWebsocketPayload(data, "ok"));
 }
 
-function WebSocketConnection(ws, jobWatchers, bespinApi) {
+function WebSocketConnection(ws, jobWatchers, bespinApiClient) {
     function onValidToken(jobId, command) {
         if (command === 'add') {
             jobWatchers.add(jobId, ws);
@@ -102,13 +108,13 @@ function WebSocketConnection(ws, jobWatchers, bespinApi) {
     }
     return {
         onData: function(jsonString) {
-            var data = parseJSON(jsonString);
+            const data = parseJSON(jsonString);
             if (data) {
-                var jobId = data['job'];
-                var token = data['token'];
-                var command = data['command'];
+                const jobId = data['job'];
+                const token = data['token'];
+                const command = data['command'];
                 if (jobId && token && command) {
-                    bespinApi.verifyToken(jobId, token, function() {
+                    bespinApiClient.verifyToken(jobId, token, function() {
                         onValidToken(jobId, command);
                     }, onVerifyError);
                 } else {

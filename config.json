@@ -1,17 +1,15 @@
 {
+  "listenOn": {
+    "host": "127.0.0.1",
+    "port": 8080
+  },
   "rabbit": {
     "protocol": "amqp",
     "exchange": "job_status",
-    "user": "guest",
-    "password": "guest",
+    "user": "lando",
+    "password": "secret",
     "host": "127.0.0.1",
     "port": 5672
-  },
-  "webserver": {
-    "host": "127.0.0.1",
-    "port": 8080,
-    "key": "sslcert/key.pem",
-    "cert": "sslcert/cert.pem"
   },
   "bespinapi": {
     "protocol": "http",

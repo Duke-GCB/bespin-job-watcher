@@ -5,7 +5,7 @@
 <body>
 <script>
     var host = window.document.location.host.replace(/:.*/, '');
-    var ws = new WebSocket('wss://' + host + ':8080');
+    var ws = new WebSocket('ws://' + host + ':8080');
 
     ws.onmessage = function (msg) {
         document.getElementById('jobStatusList').innerHTML += msg.data + "<br />";

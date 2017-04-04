@@ -1,9 +1,10 @@
-var config = require("./config.json");
-var WebServer = require("./webserver");
-var JobStatusQueue = require('./job-status-queue');
+"use strict";
+const config = require("./config.json");
+const WebServer = require("./webserver");
+const JobStatusQueue = require('./job-status-queue');
 
-var webServer = WebServer(config);
-var jobStatusQueue = JobStatusQueue(config);
+const webServer = WebServer(config);
+const jobStatusQueue = JobStatusQueue(config);
 
 jobStatusQueue.listenToExchange(
     function onJobStatusQueueReady() {

@@ -9,16 +9,15 @@ that have presented valid credentials for those jobs.
 - [bespin-api](https://github.com/Duke-GCB/bespin-api) - running instance
 
 ## Setup:
-Create https/wss self signed certificates and install node modules.
+#### Install node modules
 ```
-mkdir sslcert
-cd sslcert && openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes && cd ..
 npm install
 ```
-You can just hit enter for all the openssl prompts.
 
+#### Update Config
 Edit config.json changing it as necessary for RabbitMQ and bespin-api. 
-As long as both are running locally the default values should be fine.
+
+As long as both are running locally the default values in config.json should be fine.
 
 ## Run
 ```
@@ -26,7 +25,7 @@ node index.js
 ```
 
 ## Demo Webpage
-Browse to demo webpage: [https://localhost:8080/](https://localhost:8080/)
+Browse to demo webpage: [http://localhost:8080/](http://localhost:8080/)
 
 - Enter a user token from bespin-api and a job id owned by the specified token.
 - Click `Start Watching(add)`.
@@ -65,3 +64,36 @@ Example error message:
 }
 ```
 See static/index.html for sample Javascript.
+
+
+## Run with https
+#### Create certificates
+```
+mkdir sslcert
+cd sslcert && openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days 365 -nodes && cd ..
+```
+You can just hit enter for all the openssl prompts.
+
+#### Update config.json
+You must specify the locations of the key and cert at listenOn.key and listenOn.cert:
+```
+...
+  "listenOn": {
+     "key": "sslcert/key.pem",
+     "cert": "sslcert/cert.pem",
+...
+```
+
+#### Update static/index.html
+You will need to change the sample test program to use the __wss__ protocol instead of __ws__.
+```
+<script>
+   ...
+   var ws = new WebSocket('wss://' + host + ':8080');
+   ...
+```
+
+#### Run as you normally would
+```
+node index.js
+```

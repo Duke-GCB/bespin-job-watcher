@@ -1,22 +1,27 @@
-var request = require('request');
+"use strict";
+const request = require('request');
 
-function BespinApi(config) {
+function BespinApiClient(config) {
     return {
         verifyToken: function (jobId, token, onValidToken, onInvalidToken) {
-            var options = this.makeRequestOptions(jobId, token);
+            const options = this.makeRequestOptions(jobId, token);
             request(options, function (error, response, body) {
-                if (!error && response.statusCode == 200) {
+                const statusCode = response && response.statusCode;
+                if (!error && statusCode === 200) {
                     onValidToken(jobId);
                 } else {
-                    var errorMessage = 'Checking authorization failed with status:' + response.statusCode + ":" + error;
+                    let errorMessage = 'Checking authorization failed with:' + error;
+                    if (statusCode) {
+                        errorMessage += " (" + statusCode + ")";
+                    }
                     onInvalidToken(errorMessage);
                 }
             });
         },
         makeURL: function(jobId) {
-            var protocol = config.bespinapi.protocol;
-            var host = config.bespinapi.host;
-            var port = config.bespinapi.port;
+            const protocol = config.bespinapi.protocol;
+            const host = config.bespinapi.host;
+            const port = config.bespinapi.port;
             return protocol + '://'+ host + ':' + port + '/api/jobs/' + jobId + '/';
         },
         makeRequestOptions: function(jobId, token) {
@@ -30,4 +35,4 @@ function BespinApi(config) {
     };
 }
 
-module.exports = BespinApi;
+module.exports = BespinApiClient;
