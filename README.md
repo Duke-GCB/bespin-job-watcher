@@ -84,6 +84,14 @@ You must specify the locations of the key and cert at listenOn.key and listenOn.
 ...
 ```
 
+#### Update static/index.html
+You will need to change the sample test program to use the __wss__ protocol instead of __ws__.
+```
+<script>
+   ...
+   var ws = new WebSocket('wss://' + host + ':8080');
+```
+
 #### Run as you normally would
 ```
 node index.js
