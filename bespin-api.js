@@ -19,10 +19,7 @@ function BespinApiClient(config) {
             });
         },
         makeURL: function(jobId) {
-            const protocol = config.bespinapi.protocol;
-            const host = config.bespinapi.host;
-            const port = config.bespinapi.port;
-            return protocol + '://'+ host + ':' + port + '/api/jobs/' + jobId + '/';
+            return config.bespinapi.url + '/api/jobs/' + jobId + '/';
         },
         makeRequestOptions: function(jobId, token) {
             return {
