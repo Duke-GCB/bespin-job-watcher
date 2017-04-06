@@ -19,7 +19,7 @@ function BespinApiClient(config) {
             });
         },
         makeURL: function(jobId) {
-            return config.bespinapi.url + '/api/jobs/' + jobId + '/';
+            return config.bespinapi.url + '/jobs/' + jobId + '/';
         },
         makeRequestOptions: function(jobId, token) {
             return {
