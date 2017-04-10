@@ -2,11 +2,17 @@
   "name": "bespin-job-watcher",
   "version": "0.0.0",
   "dependencies": {
+    "express": "^4.14.1",
     "rabbit.js": "^0.4.4",
     "request": "^2.79.0",
-    "sockjs": "0.3.x"
+    "ws": "^2.0.3"
   },
   "devDependencies": {
-    "chai": "^3.5.0"
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "proxyquire": "^1.7.11"
+  },
+  "scripts": {
+    "test": "mocha tests"
   }
 }

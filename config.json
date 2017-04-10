@@ -1,11 +1,20 @@
 {
-  "rabbitexchange": "job_status",
-  "rabbituser": "guest",
-  "rabbitpassword": "guest",
-  "rabbithost": "127.0.0.1",
-  "rabbitport": 5672,
-  "webserverport": 8080,
-  "webserverhost": "0.0.0.0",
-  "bespinapihost": "127.0.0.1",
-  "bespinapiport": "8000"
+  "listenOn": {
+    "host": "127.0.0.1",
+    "port": 8080
+  },
+  "rabbit": {
+    "protocol": "amqp",
+    "exchange": "job_status",
+    "user": "lando",
+    "password": "secret",
+    "host": "127.0.0.1",
+    "port": 5672
+  },
+  "bespinapi": {
+    "protocol": "http",
+    "host": "127.0.0.1",
+    "port": "8000"
+  }
 }
+
