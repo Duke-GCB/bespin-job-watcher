@@ -97,3 +97,16 @@ You will need to change the sample test program to use the __wss__ protocol inst
 ```
 node index.js
 ```
+
+## Running in docker
+A docker container is automatically built for this repo at [quay.io/repository/dukegcb/bespin-job-watcher](https://quay.io/repository/dukegcb/bespin-job-watcher).
+It can be run from the command line like so:
+```
+docker run quay.io/dukegcb/bespin-job-watcher 
+```
+You can override the configuration by creating a file externally and overriding /usr/src/app/config.json inside the container.
+
+
+
+
+

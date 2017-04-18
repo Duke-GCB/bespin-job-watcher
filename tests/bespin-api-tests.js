@@ -16,9 +16,7 @@ describe('BespinApiClient', function() {
     it('makeRequestOptions() builds structure with expected URL', function() {
         const config = {
             bespinapi: {
-                protocol: "https",
-                host: "127.0.0.1",
-                port: "12345"
+                url: 'https://127.0.0.1:12345/api'
             }
         };
         const jobId = "541";
@@ -31,9 +29,7 @@ describe('BespinApiClient', function() {
     it('verifyToken() calls onValidToken when good', function() {
         const config = {
             bespinapi: {
-                protocol: "https",
-                host: "127.0.0.1",
-                port: "12345"
+                url: 'https://127.0.0.1:12345/api'
             }
         };
         const jobId = "541";
@@ -57,9 +53,7 @@ describe('BespinApiClient', function() {
     it('verifyToken() calls onInvalidToken when bad with null response', function() {
         const config = {
             bespinapi: {
-                protocol: "https",
-                host: "127.0.0.1",
-                port: "12345"
+                url: 'https://127.0.0.1:12345/api'
             }
         };
         const jobId = "541";
@@ -80,9 +74,7 @@ describe('BespinApiClient', function() {
     it('verifyToken() calls onInvalidToken when bad 404 response', function() {
         const config = {
             bespinapi: {
-                protocol: "https",
-                host: "127.0.0.1",
-                port: "12345"
+                url: 'https://127.0.0.1:12345/api'
             }
         };
         const jobId = "541";
