@@ -25,7 +25,7 @@ function BespinApiClient(config) {
             return {
                 url: this.makeURL(jobId),
                 headers: {
-                        'Authorization': 'Token ' + token
+                        'Authorization': 'JWT ' + token
                 }
             };
         }

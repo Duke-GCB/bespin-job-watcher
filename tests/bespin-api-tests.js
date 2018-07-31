@@ -24,7 +24,7 @@ describe('BespinApiClient', function() {
         const bespinApiClient = BespinApiClient(config);
         const requestOptions = bespinApiClient.makeRequestOptions(jobId, token);
         expect(requestOptions.url).to.equal('https://127.0.0.1:12345/api/jobs/541/');
-        expect(requestOptions.headers['Authorization']).to.equal('Token abcdefg');
+        expect(requestOptions.headers['Authorization']).to.equal('JWT abcdefg');
     });
     it('verifyToken() calls onValidToken when good', function() {
         const config = {
